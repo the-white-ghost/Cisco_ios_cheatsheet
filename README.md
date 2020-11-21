@@ -2,12 +2,74 @@
 Cisco CLI reference
 
 
+## Quick Navigtation
++ [Setup](#setup)
+    - [Intialize](#intialize)
+    - [Set Clock](#set-clock)
++ [Interfaces](#interfaces)
+    - [Assign Static IP to Interface](#assign-static-ip-to-interface)
+    - [Interface Ranges](#interface-ranges)
++ [Interface Verification](#interface-verification)
+    - [Remove IP Addresses](#remove-ip-addresses)
++ [DHCP](#dhcp)
+    - [Enable Router DHCP Server](#enable-router-dhcp-server)
+    - [DHCP Verification](#dhcp-verification)
+    - [Disable DHCP](#disable-dhcp)
+    - [Re-enabled DHCP](#re-enabled-dhcp)
+    - [Create VLAN DHCP](#create-vlan-dhcp)
+    - [Verify DHCP Pool](#verify-dhcp-pool)
+    - [Delete DHCP Pool](#delete-dhcp-pool)
++ [VLANs](#vlans)
+    - [VLAN Creation](#vlan-creation)
+    - [Port Assignment](#port-assignment)
+    - [IP Assignemnt](#ip-assignemnt)
+    - [Verification](#verification)
+    - [Delete VLANS on file](#delete-vlans-on-file)
+    - [Delete VLANS in memory](#delete-vlans-in-memory)
+    - [Inter-VLAN Routing](#inter-vlan-routing)
++ [Trunks](#trunks)
+    - [Create multi-switch vlan trunk](#create-multi-switch-vlan-trunk)
+    - [Trunk Verification](#trunk-verification)
++ [EtherChannel](#etherchannel)
+    - [Configure EtherChannel](#configure-etherchannel)
+    - [Verify EtherChannel](#verify-etherchannel)
++ [DTP (Dynamic Trunking Protocol)](#dtp-dynamic-trunking-protocol)
+    - [Configure DTP](#configure-dtp)
+    - [Disable DTP](#disable-dtp)
+    - [Verify DTP](#verify-dtp)
++ [OSPFv2](#ospfv2)
+    - [Verify OSPF](#verify-ospf)
+    - [Enable router OSPF process](#enable-router-ospf-process)
+    - [Configure Loopback](#configure-loopback)
+    - [Configure OSPF Router ID](#configure-ospf-router-id)
+    - [Modify OSPF router ID](#modify-ospf-router-id)
+    - [Configure OSPF With Network Command](#configure-ospf-with-network-command)
+    - [Configure OSPF with `ip ospf`](#configure-ospf-with-ip-ospf)
+    - [OSPF Passive Interfaces](#ospf-passive-interfaces)
+    - [Find Designated Router and Backup](#find-designated-router-and-backup)
+    - [Loopback and P2P Networks](#loopback-and-p2p-networks)
+    - [Configure OSPF Priority](#configure-ospf-priority)
+    - [Manually Set OSPF Link Cost](#manually-set-ospf-link-cost)
+    - [Adjusting Reference Bandwidth](#adjusting-reference-bandwidth)
+    - [Show OSPF Hello Packet Intervals](#show-ospf-hello-packet-intervals)
+    - [Set OSPF Hello Packet Intervals](#set-ospf-hello-packet-intervals)
+    - [Propogate Default Route](#ospf-propogate-default-route)
+    - [Verify Propogated Default Route](#verify-propogated-default-route)
++ [Basic Security](#basic-security)
++ [Console Port](#console-port)
+    - [Change Console Baudrate](#change-console-baudrate)
+    - [Configure SSH](#configure-ssh)
 
 
 
 
 
 
+
+
+
+### Setup
+---
 ### Intialize
 
 These commands wipe all config and reboot the device
@@ -390,6 +452,7 @@ show etherchannel summary
 ### DTP (Dynamic Trunking Protocol)
 ---
 
+
 #### Configure DTP
 
 ```
@@ -428,7 +491,7 @@ show dtp interface gi0/1
 ```
 
 ### OSPFv2
-
+---
 #### Verify OSPF
 ```
 show ip ospf neighbour
@@ -540,6 +603,31 @@ end
 show ip ospf interface GigabitEthernet 0/0/0
 ```
 
+##### Loopback and P2P Networks
+
+Loobacks can be used to simulate real LAN networks
+
+```
+conf t
+interface Loopback 0
+ip ospf network point-to-point
+```
+
+```
+show ip route | include 10.10.1
+```
+
+##### Configure OSPF Priority
+
+```
+conf t
+int g0/0/1
+ip ospf priority 255
+end
+```
+
+Where `255` can be values from `0` to `255` with higher numbers making the router to be elected `DR`.
+
 ##### Manually Set OSPF Link Cost
 
 ```
@@ -550,6 +638,15 @@ interface l0
 ip ospf cost 15
 end
 ```
+##### Adjusting Reference Bandwidth
+
+```
+Router# router ospf 10
+Router(config-router) auto-cost reference bandwidth 1000
+```
+
+_Where 1000 is the speed of the link in Mpbs_
+Common Values: 10, 100, 1000
 
 ##### Show OSPF Hello Packet Intervals
 
@@ -588,6 +685,7 @@ show ip route | begin Gateway
 ```
 
 ### Basic Security
+---
 
 ```
 conf t
@@ -606,7 +704,7 @@ end
 
 
 ### Console Port
-
+---
 #### Change Console Baudrate
 
 ```
